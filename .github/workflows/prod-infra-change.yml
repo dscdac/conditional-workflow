@@ -2,21 +2,22 @@ name: CI Conditional Change
 
 on:
   workflow_dispatch:
-    serviceName:
-      description: 'The microservice to deploy'
-      required: true
-    deployToCH:
-      description: 'Deploy to CH region'
-      required: true
-      default: 'false'
-    deployToUS:
-      description: 'Deploy to US region'
-      required: true
-      default: 'false'
-    createDomain:
-      description: 'Create domain'
-      required: false
-      default: 'false'
+    inputs:
+      serviceName:
+        description: 'The microservice to deploy'
+        required: true
+      deployToCH:
+        description: 'Deploy to CH region'
+        required: true
+        default: 'false'
+      deployToUS:
+        description: 'Deploy to US region'
+        required: true
+        default: 'false'
+      createDomain:
+        description: 'Create domain'
+        required: false
+        default: 'false'
 
 env:
   STAGE: development
@@ -50,7 +51,7 @@ jobs:
 
       - name: Creating domain
         if: ${{ github.event.inputs.createDomain == 'true' }} && ${{env.SHOULD_RUN}}
-        run: echo "create-domain ${{ github.event.inputs.serviceName }}"
+        run: echo "create-domain ${{env.SHOULD_RUN}} ${{ github.event.inputs.serviceName }} ${{ github.event.inputs.deployToCH }} ${{ github.event.inputs.deployToUS }} ${{ github.event.inputs.createDomain }}"
 
       - name: Deploy package
         if: ${{env.SHOULD_RUN}}
