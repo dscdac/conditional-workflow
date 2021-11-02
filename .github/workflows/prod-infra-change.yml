@@ -57,5 +57,5 @@ jobs:
         run: echo "SHOULD_RUN? env.SHOULD_RUN SHOULD_RUN? `env.SHOULD_RUN == 1`"
 
       - name: Deploy package
-        if: ${{ (github.event.inputs.deployToCH == '1' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '1' && matrix.REGION == 'AWS_US_REGION') }}
+        if: ${{ env.SHOULD_RUN }}
         run: echo "deploy ${{ github.event.inputs.serviceName }}"
