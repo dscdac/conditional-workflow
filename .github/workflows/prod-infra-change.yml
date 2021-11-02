@@ -54,7 +54,7 @@ jobs:
         run: echo "create-domain SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
 
       - name: Debug
-        run: echo "SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
+        run: echo "SHOULD_RUN? ${{$GITHUB_ENV.SHOULD_RUN}} SHOULD_RUN? ${{env.SHOULD_RUN}} SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
 
       - name: Deploy package
         if: ${{env.SHOULD_RUN}}
