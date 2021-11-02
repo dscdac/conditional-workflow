@@ -9,15 +9,15 @@ on:
       deployToCH:
         description: 'Deploy to CH region'
         required: true
-        default: 'false'
+        default: '0'
       deployToUS:
         description: 'Deploy to US region'
         required: true
-        default: 'false'
+        default: '0'
       createDomain:
         description: 'Create domain'
         required: false
-        default: 'false'
+        default: '0'
 
 env:
   STAGE: development
@@ -34,10 +34,10 @@ jobs:
 
     steps:
       - name: Should we run?
-        run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == 'true' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == 'true' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
+        run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == '0' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '0' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
-        if: ${{env.SHOULD_RUN}}
+        if: ${{SHOULD_RUN}}
 
       - name: Set up node
         if: ${{env.SHOULD_RUN}}
@@ -50,7 +50,7 @@ jobs:
         run: npm ci
 
       - name: Creating domain
-        if: ${{ github.event.inputs.createDomain == 'true' }} && ${{env.SHOULD_RUN}}
+        if: ${{ github.event.inputs.createDomain == '0' }} && ${{env.SHOULD_RUN}}
         run: echo "create-domain ${{env.SHOULD_RUN}} ${{ github.event.inputs.serviceName }} ${{ github.event.inputs.deployToCH }} ${{ github.event.inputs.deployToUS }} ${{ github.event.inputs.createDomain }}"
 
       - name: Deploy package
