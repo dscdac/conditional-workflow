@@ -50,8 +50,8 @@ jobs:
         run: npm ci
 
       - name: Creating domain
-        if: ${{ github.event.inputs.createDomain == '0' }} && ${{env.SHOULD_RUN}}
-        run: echo "create-domain ${{env.SHOULD_RUN}} ${{ github.event.inputs.serviceName }} ${{ github.event.inputs.deployToCH }} ${{ github.event.inputs.deployToUS }} ${{ github.event.inputs.createDomain }}"
+        if: ${{ github.event.inputs.createDomain == '1' && env.SHOULD_RUN}}
+        run: echo "create-domain SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
 
       - name: Deploy package
         if: ${{env.SHOULD_RUN}}
