@@ -50,11 +50,11 @@ jobs:
         run: npm ci
 
       - name: Creating domain
-        if: ${{ github.event.inputs.createDomain == '1' && env.SHOULD_RUN}}
+        if: github.event.inputs.createDomain == '1' && env.SHOULD_RUN
         run: echo "create-domain SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
 
       - name: Debug
-        run: echo "SHOULD_RUN? ${{github.env.SHOULD_RUN}} SHOULD_RUN? ${{env.SHOULD_RUN}} SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}  ${{github}}"
+        run: echo "SHOULD_RUN? env.SHOULD_RUN SHOULD_RUN? `env.SHOULD_RUN == 1`"
 
       - name: Deploy package
         if: ${{env.SHOULD_RUN}}
