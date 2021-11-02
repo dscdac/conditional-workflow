@@ -37,7 +37,7 @@ jobs:
         run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == '1' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '1' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
-        if: ${{env.SHOULD_RUN == 'true'}}
+        if: env.SHOULD_RUN == 'true'
 
       - name: Set up node
         if: ${{env.SHOULD_RUN == 1}}
