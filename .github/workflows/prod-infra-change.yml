@@ -37,16 +37,16 @@ jobs:
         run: echo "SHOULD_RUN=`echo ${{ (github.event.inputs.deployToCH == '1' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '1' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
-        if: ${{env.SHOULD_RUN}}
+        if: env.SHOULD_RUN == 'true'
 
       - name: Set up node
-        if: ${{env.SHOULD_RUN}}
+        if: env.SHOULD_RUN == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
 
       - name: Install packages
-        if: ${{env.SHOULD_RUN}}
+        if: env.SHOULD_RUN == 'true'
         run: npm ci
 
       - name: Creating domain
