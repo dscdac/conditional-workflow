@@ -1,0 +1,57 @@
+name: CI Conditional Change
+
+on:
+  workflow_dispatch:
+    serviceName:
+      description: 'The microservice to deploy'
+      required: true
+    deployToCH:
+      description: 'Deploy to CH region'
+      required: true
+      default: 'false'
+    deployToUS:
+      description: 'Deploy to US region'
+      required: true
+      default: 'false'
+    createDomain:
+      description: 'Create domain'
+      required: false
+      default: 'false'
+
+env:
+  STAGE: development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - REGION: AWS_CH_REGION
+          - REGION: AWS_US_REGION
+
+    steps:
+      - name: Should we run?
+        run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == 'true' && matrix.REGION == AWS_CH_REGION) || (github.event.inputs.deployToUS == 'true' && matrix.REGION == AWS_US_REGION) }}`" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v2
+        if: ${{env.SHOULD_RUN}}
+
+      - name: Set up node
+        if: ${{env.SHOULD_RUN}}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install packages
+        if: ${{env.SHOULD_RUN}}
+        run: npm ci
+
+      - name: Creating domain
+        if: ${{ github.event.inputs.createDomain == 'true' }} && ${{env.SHOULD_RUN}}
+        run: echo "create-domain ${{ github.event.inputs.serviceName }}"
+
+      - name: Deploy package
+        if: ${{env.SHOULD_RUN}}
+        run: echo "deploy ${{ github.event.inputs.serviceName }}"
