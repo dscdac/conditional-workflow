@@ -40,13 +40,13 @@ jobs:
         if: ${{env.SHOULD_RUN}}
 
       - name: Set up node
-        if: env.SHOULD_RUN
+        if: ${{env.SHOULD_RUN}}
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
 
       - name: Install packages
-        if: env.SHOULD_RUN
+        if: ${{env.SHOULD_RUN}}
         run: npm ci
 
       - name: Creating domain
