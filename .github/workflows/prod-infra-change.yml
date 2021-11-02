@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Should we run?
-        run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == '0' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '0' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
+        run: echo "SHOULD_RUN=`${{ (github.event.inputs.deployToCH == '1' && matrix.REGION == 'AWS_CH_REGION') || (github.event.inputs.deployToUS == '1' && matrix.REGION == 'AWS_US_REGION') }}`" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
         if: ${{env.SHOULD_RUN == 'true'}}
@@ -52,6 +52,9 @@ jobs:
       - name: Creating domain
         if: ${{ github.event.inputs.createDomain == '1' && env.SHOULD_RUN}}
         run: echo "create-domain SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
+
+      - name: Debug
+        run: echo "SHOULD_RUN? ${{env.SHOULD_RUN == 'true'}} SHOULD_RUN? ${{env.SHOULD_RUN == '1'}}"
 
       - name: Deploy package
         if: ${{env.SHOULD_RUN}}
